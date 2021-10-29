@@ -8,6 +8,8 @@
     DÙNG EXCEL MẤY BÀI NÀY HOÀN TOÀN LÀM ĐƯỢC
 
     KHÔNG DÀNH CHO CÁC BẠN GIỎI^^ 
+    Ai thích thì lên đây, tôi làm thêm cái Euler với RungeKutta nha:
+        github : https://github.com/jkdoandeptrai/THTT_MAINGOCDOAN
 */
 #include <iostream>
 #include <valarray>
