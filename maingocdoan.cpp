@@ -53,9 +53,9 @@ void   dhC1_2(const vector<double>&, const vector<double>&, double );
 // tính đạo hàm cấp 2 độ chính xác cấp 2
 void   dhC2_2( const vector<double>&, const vector<double>& , double );
 // tính gần đúng tích phân bằng công thức hình thang
-void   ctHinhThang( const vector<double>& , double );
+void   ctHinhThang(  const vector<double>&,const vector<double>& );
 // tính gần đúng tích phân bằng công thức hình thang
-void   ctSimpson( const vector<double>& , double );
+void   ctSimpson( const vector<double>&,const vector<double>& );
 void   ppEuler( double(*functY)(double,double) ,const vector<double>& x, double, int );
 void   ppEulerHePT( double(*functY)(double, double, double) , double(*functU)(double, double, double) ,const vector<double>& , double, double, int);
 double RungeKutta4(double(*funct)(double, double), vector<double>, double);
@@ -66,14 +66,21 @@ double RungeKutta4(double(*funct)(double, double), vector<double>, double);
 /*             -------------------------------------------------------------------------------------------------------------------*/
 // sẽ cập nhật thêm phần Euler và RungeKutta.
 int main(){
-    // ppChiaDoi(myfunction,1,3,10,0.000001);
-    // ppNewton(myfunction,myDerivation,3,10);
-    // ppLapDon(myfunction,0,10,0.5,0.0000002);
+    // phương pháp chia đôi
+        // ppChiaDoi(myfunction,1,3,10,0.000001);
+    // phương pháp newton
+        // ppNewton(myfunction,myDerivation,3,10);
+    // phương pháp lặp đơn
+        // ppLapDon(myfunction,0,10,0.5,0.0000002);
+    // đạo hàm cấp 1 với độ chính xác cấp 1:
+        // dhC1_1({0.94, 1.04, 1.14, 1.34, 1.54, 1.64, 1.74, 2.04, 2.34, 2.54, 2.74, 3.04, 3.34},
+        // {3.901,4.163,4.471, 5.261, 6.354, 7.053, 7.879,11.428,17.582,24.212,34.23,60.438,113.2});
     // dhC2_2({0.6, 0.8, 1, 1.2, 1.4, 1.6},{0.65, 1.74, 3, 4.52, 6.62, 9.3},0.2);
-    // ctHinhThang({7, 8.2, 9.4, 9.8, 10.6, 10.2, 9.2},0.2);
-    // ctSimpson({7, 8.2, 9.4, 9.8, 10.6, 10.2, 9.2},0.2);
+    ctHinhThang({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
+    ctSimpson({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
+    // ppEuler(myEulerfunction,{},0.4,8);
     // ppEulerHePT(myEulerfunctionY,myEulerfunctionU,{1, 1.2, 1.3, 1.6, 1.7, 2, 2.1, 2.3},0.4,1,7);
-    RungeKutta4(myEulerfunction,{2, 2.1, 2.3, 2.6, 2.7}, 0.4);
+    // RungeKutta4(myEulerfunction,{2, 2.1, 2.3, 2.6, 2.7}, 0.4);
 
 
     return 0;
@@ -100,19 +107,20 @@ double ppChiaDoi( double(*functY)(double),double a, double b, int n, double ssCa
     double bk = b;
     double saiso = abs((a-b)/pow(2,n));
     double k = ceil( log2( abs((b - a)) / ssCanTinh ) );
+    cout << fixed << setprecision(6);
     for ( int i = 0; i <= n ; i ++){
         double ck = (ak+bk)/2;
         double mul = functY(ak)*functY(ck);
         cout << "i: ";
         cout << setw(4) << left << i + 1;
         cout << "ak: ";
-        cout << setw(10) << left <<  setprecision(6) << ak;
+        cout << setw(10) << left << ak;
         cout << "bk: ";
-        cout << setw(10) << left << setprecision(6) << bk;
+        cout << setw(10) << left << bk;
         cout << "ck: ";
-        cout << setw(10) << left <<  setprecision(6) << ck;
+        cout << setw(10) << left << ck;
         cout << "f(ak)*f(ck): ";
-        cout << setw(10) << left << setprecision(6) << fixed << mul;
+        cout << setw(10) << left << mul;
         if ( i < n )
             ( functY(ak)*functY(ck) < 0 ) ? bk = ck : ak = ck;
         cout<<endl;
@@ -120,7 +128,7 @@ double ppChiaDoi( double(*functY)(double),double a, double b, int n, double ssCa
     cout << "Nghiem gan dung: " << (bk+ak)/2 << endl;
     cout << "Sai so sau " << n << " lan lap: "<< saiso << endl;
     if ( ssCanTinh != -1 )
-        cout << "Can lap "<< k << " lan de co sai so "<< fixed << ssCanTinh << endl;
+        cout << "Can lap "<< setprecision(0) << k << " lan de co sai so "<< setprecision (10) << ssCanTinh << endl;
     return saiso;
 }
 double ppNewton( double(*functY)(double), double (*derived)(double) ,  double fourier, int n)
@@ -186,8 +194,9 @@ void dhC1_1  (const vector<double>& x, const vector<double>& y )
    
     const int size = x.size();
     if ( size == y.size() ){
+        cout << fixed << setprecision(6);
         for ( int i = 0; i < size - 1 ; i++){
-            cout << "f'("<< x[i] << ") = " << (y[i+1] - y[i])/(x[i+1] - x[i])<<endl;
+            cout << "f'("<< x[i] << ") = "  << (y[i+1] - y[i])/(x[i+1] - x[i])<<endl;
         }
     } else {
         cout << "x,y sai roi ban e!"<<endl;
@@ -206,6 +215,7 @@ void dhC1_2   ( const vector<double>& x, const vector<double>& y , double h)
    
     const int size = x.size();
     if ( size == y.size() ){
+        cout << setprecision(6) << fixed ;
         cout << "f'(x[0]) = " << (-y[2] + 4*y[1] - 3*y[0]) / (2*h) << endl;
         for ( int i = 1; i < size - 1; i++){
             cout << "f'(x["<<i<<"]) = " << (y[i+1] - y[i-1])/ (2*h) << endl;
@@ -229,6 +239,7 @@ void dhC2_2   ( const vector<double>& x, const vector<double>& y , double h)
    
     const int size = x.size();
     if ( size == y.size() ){
+        cout << fixed << setprecision(6) ;
         cout << "f''(x[0]) = " << (-y[3] +4*y[2] - 5*y[1] +2*y[0]) / (h*h) << endl;
         for ( int i = 1; i < size - 1; i++){
             cout << "f''(x["<<i<<"]) = " << (y[i+1] - 2*y[i] + y[i-1])/ (h*h) << endl;
@@ -239,24 +250,24 @@ void dhC2_2   ( const vector<double>& x, const vector<double>& y , double h)
     }
     return;
 }
-void ctHinhThang( const vector<double>& y, double h )
+void ctHinhThang( const vector<double>& x,const vector<double>& y)
 {
     /*
         @param: 
             + y : list các điểm y(x), khi truyền vào hàm truyền theo dạng {5,6,7,8...};
-            + h : khoảng cách giữa 2 điểm x: x[k+1] - x[k]
             
     */
    
     double sum = 0;
     int  size = y.size();
-    for ( int i = 1; i < size - 1; i++ ){
-        sum += 2*y[i];
+    cout << fixed << setprecision(6);
+    for ( int i = 0; i < size - 1; i++ ){
+        sum += ((x[i+1]-x[i])/2)*(y[i+1]+y[i]);
     }
-    cout << "Gia tri gan dung tich phan: " << (h/2)*(y[0] + y[size -1] + sum )<<endl;
+    cout << "Gia tri gan dung tich phan: " << sum <<endl;
     return;
 }
-void ctSimpson( const vector<double>& y , double h)
+void ctSimpson(const vector<double>& x ,const vector<double>& y)
 {
     /*
         @param: 
@@ -264,18 +275,14 @@ void ctSimpson( const vector<double>& y , double h)
             + h : khoảng cách giữa 2 điểm x: x[k+1] - x[k]
             
     */
-    double sumOdd = 0, sumEven = 0;
-    int size = y.size();
-    for ( int i = 1; i < size - 1; i++){
-        // cộng các y có chỉ số chẵn
-        if ( i%2 == 0 ){
-            sumEven += 2*y[i];
-        } else {
-            // cộng các y có chỉ số lẻ
-            sumOdd += 4*y[i];
-        }
+    double sum = 0;
+    int size = x.size();
+    cout << fixed << setprecision(6);
+    for ( int i = 1; i < size  ; i +=2 ){
+        sum += ((x[i + 1] - x[i-1])/6)*(y[i-1] + 4*y[i] + y[i+1]);
+        
     }
-    cout << "Gia tri gan dung tich phan theo phuong phap Simpson: "<<(h/3)*( y[0] + y[size-1] + sumOdd + sumEven)<<endl;
+    cout << "Gia tri gan dung tich phan theo phuong phap Simpson: "<<sum<<endl;
     return;
 }
 void   ppEuler( double(*functY)(double, double) ,const vector<double>& x, double y0, int n )
