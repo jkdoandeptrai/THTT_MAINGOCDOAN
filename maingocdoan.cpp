@@ -35,10 +35,10 @@ double myEulerfunction(double x, double y){
     return x*y + 3*x -2*y;
 }
 double myEulerfunctionY(double x, double y, double z){
-    return 2*x*y + y - z;
+    return 1.97 * x*x + 2*x -5.08*y + 1.67*z;
 }
 double myEulerfunctionU(double x, double y, double z){
-    return x*x + y - z*x;
+    return -2.44 *x*x -3*x +2.74*y +0.87*z;
 }
 // hàm dùng cho phương pháp chia đôi:
 double ppChiaDoi( double(*functY)(double), double, double, int, double );
@@ -57,7 +57,7 @@ void   ctHinhThang(  const vector<double>&,const vector<double>& );
 // tính gần đúng tích phân bằng công thức hình thang
 void   ctSimpson( const vector<double>&,const vector<double>& );
 void   ppEuler( double(*functY)(double,double) ,const vector<double>& x, double );
-void   ppEulerHePT( double(*functY)(double, double, double) , double(*functU)(double, double, double) ,const vector<double>& , double, double, int);
+void   ppEulerHePT( double(*functY)(double, double, double) , double(*functU)(double, double, double) ,const vector<double>& , double, double);
 double RungeKutta4(double(*funct)(double, double), vector<double>, double);
 
 
@@ -72,16 +72,31 @@ int main(){
         // ppNewton(myfunction,myDerivation,3,10);
     // phương pháp lặp đơn
         // ppLapDon(myfunction,0,10,0.5,0.0000002);
+    //***************************************************
     // đạo hàm cấp 1 với độ chính xác cấp 1:
-        // dhC1_1({0.94, 1.04, 1.14, 1.34, 1.54, 1.64, 1.74, 2.04, 2.34, 2.54, 2.74, 3.04, 3.34},
-        // {3.901,4.163,4.471, 5.261, 6.354, 7.053, 7.879,11.428,17.582,24.212,34.23,60.438,113.2});
-    // dhC2_2({0.6, 0.8, 1, 1.2, 1.4, 1.6},{0.65, 1.74, 3, 4.52, 6.62, 9.3},0.2);
+    dhC1_1({0.1, 0.2, 0.3, 0.4, 0.5},
+           {11.051,12.268,13.657,15.224, 16.975});
+    //***************************************************
+        dhC1_2({0.1, 0.2, 0.3, 0.4, 0.5},
+        {11.051,12.268,13.657,15.224, 16.975},0.1);
+    //***************************************************
+    dhC2_2({0.1, 0.2, 0.3, 0.4, 0.5},
+        {11.051,12.268,13.657,15.224, 16.975},0.1);
+    //***************************************************
+
     // ctHinhThang({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
+    //***************************************************
+
     // ctSimpson({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
-    ppEuler(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
-    cout << endl;
-    // ppEulerHePT(myEulerfunctionY,myEulerfunctionU,{1, 1.2, 1.3, 1.6, 1.7, 2, 2.1, 2.3},0.4,1,7);
-    RungeKutta4(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
+    //***************************************************
+
+    // ppEuler(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
+    //***************************************************
+    // cout << endl;
+    // ppEulerHePT(myEulerfunctionY,myEulerfunctionU,{0,0.1,0.3,0.4,0.7,0.8,1},4.11,1.7);
+    //***************************************************
+
+    // RungeKutta4(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
 
 
     return 0;
@@ -245,7 +260,7 @@ void dhC2_2   ( const vector<double>& x, const vector<double>& y , double h)
         for ( int i = 1; i < size - 1; i++){
             cout << "f''(x["<<i<<"]) = " << (y[i+1] - 2*y[i] + y[i-1])/ (h*h) << endl;
         }
-        cout << "f''(x["<<size-1<<"]) = " << (y[size - 4] - 4*y[size -3] + 5*y[size -2] -2*y[size -1]) / (h*h) << endl;
+        cout << "f''(x["<<size-1<<"]) = " << abs((y[size - 4] - 4*y[size -3] + 5*y[size -2] -2*y[size -1]) / (h*h) ) << endl;
     } else {
         cout << "Nhap sai roi cac ban oi. "<<endl;
     }
@@ -321,11 +336,13 @@ void   ppEuler( double(*functY)(double, double) ,const vector<double>& x, double
         }
 
     }
+    cout << endl;
     return;
 }
 
-void   ppEulerHePT(  double(*functY)(double, double, double) , double(*functU)(double, double, double) ,const vector<double>& x, double y0, double u0, int n )
+void   ppEulerHePT(  double(*functY)(double, double, double) , double(*functU)(double, double, double) ,const vector<double>& x, double y0, double u0 )
 {
+    int n = x.size() -1 ;
     double result[n+2][8];
     /////////////////////////////////////////////
     // cột x:
