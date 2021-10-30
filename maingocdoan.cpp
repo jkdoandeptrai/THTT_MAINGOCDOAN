@@ -32,7 +32,7 @@ double myDerivation(double x) // x là ẩn số
     return 6*x*x - 2 ; // ví dụ ta có đạo hàm hàm số trên
 }
 double myEulerfunction(double x, double y){
-    return x*y + 3*x - 2*y;
+    return x*y + 3*x -2*y;
 }
 double myEulerfunctionY(double x, double y, double z){
     return 2*x*y + y - z;
@@ -56,7 +56,7 @@ void   dhC2_2( const vector<double>&, const vector<double>& , double );
 void   ctHinhThang(  const vector<double>&,const vector<double>& );
 // tính gần đúng tích phân bằng công thức hình thang
 void   ctSimpson( const vector<double>&,const vector<double>& );
-void   ppEuler( double(*functY)(double,double) ,const vector<double>& x, double, int );
+void   ppEuler( double(*functY)(double,double) ,const vector<double>& x, double );
 void   ppEulerHePT( double(*functY)(double, double, double) , double(*functU)(double, double, double) ,const vector<double>& , double, double, int);
 double RungeKutta4(double(*funct)(double, double), vector<double>, double);
 
@@ -76,11 +76,12 @@ int main(){
         // dhC1_1({0.94, 1.04, 1.14, 1.34, 1.54, 1.64, 1.74, 2.04, 2.34, 2.54, 2.74, 3.04, 3.34},
         // {3.901,4.163,4.471, 5.261, 6.354, 7.053, 7.879,11.428,17.582,24.212,34.23,60.438,113.2});
     // dhC2_2({0.6, 0.8, 1, 1.2, 1.4, 1.6},{0.65, 1.74, 3, 4.52, 6.62, 9.3},0.2);
-    ctHinhThang({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
-    ctSimpson({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
-    // ppEuler(myEulerfunction,{},0.4,8);
+    // ctHinhThang({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
+    // ctSimpson({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
+    ppEuler(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
+    cout << endl;
     // ppEulerHePT(myEulerfunctionY,myEulerfunctionU,{1, 1.2, 1.3, 1.6, 1.7, 2, 2.1, 2.3},0.4,1,7);
-    // RungeKutta4(myEulerfunction,{2, 2.1, 2.3, 2.6, 2.7}, 0.4);
+    RungeKutta4(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
 
 
     return 0;
@@ -285,8 +286,8 @@ void ctSimpson(const vector<double>& x ,const vector<double>& y)
     cout << "Gia tri gan dung tich phan theo phuong phap Simpson: "<<sum<<endl;
     return;
 }
-void   ppEuler( double(*functY)(double, double) ,const vector<double>& x, double y0, int n )
-{
+void   ppEuler( double(*functY)(double, double) ,const vector<double>& x, double y0){
+    int n = x.size() -1 ;
     double result[n+1][5];
     /////////////////////////////////////////////
     for ( int i = 0; i <= n; i++ ){
@@ -413,7 +414,7 @@ double RungeKutta4(double(*funct)(double, double), vector<double> x, double y0)
         double fy3 = funct(x[0] + h/2,y0 + k_12/2);
         cout << setw(20) << left << fy3;
         double k_13 = h*fy3;
-        cout << setw(20) << left << k_12 ;
+        cout << setw(20) << left << k_13 ;
         cout << endl;
         /// k14
         cout << setw(20) << left << x[0] + h;
@@ -427,11 +428,10 @@ double RungeKutta4(double(*funct)(double, double), vector<double> x, double y0)
         }
         x.pop_back();
         float denta = (k_11 + 2*k_12 + 2*k_13 + k_14)/6;
-        y0 += denta;
         cout << endl;
         cout << " Yi = " << y0 << ", denta = " << denta <<endl;
         cout << endl << endl << "-------------------------------------" <<endl;
-        return RungeKutta4(funct,x,y0);
+        return RungeKutta4(funct,x,y0 + denta);
     } else{
         return y0;
     }
