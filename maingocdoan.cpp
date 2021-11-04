@@ -98,7 +98,6 @@ int main(){
 
     // RungeKutta4(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
 
-
     return 0;
 }
 
