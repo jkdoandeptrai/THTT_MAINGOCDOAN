@@ -15,51 +15,69 @@
 #include <valarray>
 #include <vector>
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 #include <iomanip>
 using namespace std;
 // viết dạng hàm vào chỗ return
 double myfunction(double x) // x là ẩn số 
 {
-    return x*x*x -2*x*x + 2*x -100 ; // ví dụ ta có hàm số y = 2*x^3 - 2*x -2.1
+    return log(x*58.26+3.17)/1.97 ; // ví dụ ta có hàm số y = 2*x^3 - 2*x -2.1
     /*
-
+    M_E; M_PI
     */
 }
 // đạo hàm hàm y
 double myDerivation(double x) // x là ẩn số 
 {
-    return 3*x*x - 4*x + 2 ; // ví dụ ta có đạo hàm hàm số trên
+    return 1.97*pow(M_E,1.97*x) - 58.26 ; // ví dụ ta có đạo hàm hàm số trên
 }
 double myEulerfunction(double x, double y){
     return x*y + 3*x -2*y;
 }
 double myEulerfunctionY(double x, double y, double z){
-    return 1.97 * x*x + 2*x -5.08*y + 1.67*z;
+    return 0.17*x + 0.13*y-0.09*z + 5;
 }
 double myEulerfunctionU(double x, double y, double z){
-    return -2.44 *x*x -3*x +2.74*y +0.87*z;
+    return 0.08 *x -0.2*y + 0.15*z -3;
+}
+double myEulerfunctionZ(double x, double y, double z){
+    return -0.1*x + 0.1*y - 0.29*z + 4.39;
 }
 // hàm dùng cho phương pháp chia đôi:
 double ppChiaDoi( double(*functY)(double), double, double, int, double );
+
+double pplapdonVaSeiden(double(*functX)(double, double, double), double(*functY)(double,double,double),\
+ double(*functZ)(double,double,double), vector<double>, double, int);
 // hàm dùng cho phương pháp newton
-double ppNewton( double(*functY)(double), double (*derived)(double), double, int);
+double ppNewton( double(*functY)(double),\
+ double (*derived)(double), double, int);
+
 // hàm dùng cho phương pháp lặp đơn
-double ppLapDon( double(*functY)(double), double, int, double, double ssCanTinh = -1);
+double ppLapDon( double(*functY)(double),\
+ double, int, double, double ssCanTinh = -1);
 // tính đạo hàm cấp 1, độ chính xác cấp1
 void   dhC1_1( const vector<double>&, const vector<double>& );
+
 // tính đạo hàm cấp 1, độ chính xác cấp 2
 void   dhC1_2(const vector<double>&, const vector<double>&, double );
+
 // tính đạo hàm cấp 2 độ chính xác cấp 2
 void   dhC2_2( const vector<double>&, const vector<double>& , double );
+
 // tính gần đúng tích phân bằng công thức hình thang
 void   ctHinhThang(  const vector<double>&,const vector<double>& );
+
 // tính gần đúng tích phân bằng công thức hình thang
 void   ctSimpson( const vector<double>&,const vector<double>& );
+
 void   ppEuler( double(*functY)(double,double) ,const vector<double>& x, double );
-void   ppEulerHePT( double(*functY)(double, double, double) , double(*functU)(double, double, double) ,const vector<double>& , double, double);
+
+void   ppEulerHePT( double(*functY)(double, double, double) ,\
+ double(*functU)(double, double, double) ,const vector<double>& , double, double);
+ 
 double RungeKutta4(double(*funct)(double, double), vector<double>, double);
 
+double maxG(double,double,double);
 
 
 
@@ -67,35 +85,46 @@ double RungeKutta4(double(*funct)(double, double), vector<double>, double);
 // sẽ cập nhật thêm phần Euler và RungeKutta.
 int main(){
     //phương pháp chia đôi
-        // ppChiaDoi(myfunction,2,3,10,0.00001);
+    //                         a, b, solanlap, saiso
+        // ppChiaDoi(myfunction,0.5,3.54,10,0.00013);
     // phương pháp newton
-        // ppNewton(myfunction,myDerivation,6,9);
+    //                         fourier, solanlap
+    //    ppNewton(myfunction,myDerivation,3.54,10);
     // phương pháp lặp đơn
-        // ppLapDon(myfunction,0,16,0.395997,0.000001);
+    //             X0, solanlap, p, saiso
+        // ppLapDon(myfunction,1,10,0.915591,0.00019);
+    // phuong phap lap don cho he phuong tring
+    //                                                                      {x}, G, solanlap
+        pplapdonVaSeiden(myEulerfunctionY,myEulerfunctionU,myEulerfunctionZ,{2.97,-0.54,3.17},0.49,10);
+    
     //***************************************************
     // đạo hàm cấp 1 với độ chính xác cấp 1:
-    dhC1_1({4,4.2,4.4,4.6,4.8,5,5.2},
-           {7,8.2,9.4,9.8,10.6,10.2,9.2});
+    //         {x},{y}
+    // dhC1_1({4,4.2,4.4,4.6,4.8,5,5.2},
+    //        {7,8.2,9.4,9.8,10.6,10.2,9.2});
     // //***************************************************
+    //         {x},{y};
     //     dhC1_2({4,4.2,4.4,4.6,4.8,5,5,2},
     //     {7,8.2,9.4,9.8,10.6,10.2,9.2},0.2);
     // //***************************************************
-    dhC2_2({4,4.2,4.4,4.6,4.8,5,5.2},
-        {7,8.2,9.4,9.8,10.6,10.2,9.2},0.2);
+    //        {x},{y}
+    // dhC2_2({4,4.2,4.4,4.6,4.8,5,5.2},
+    //     {7,8.2,9.4,9.8,10.6,10.2,9.2},0.2);
     //***************************************************
 
-    ctHinhThang({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
+    // ctHinhThang({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
     //***************************************************
 
-    ctSimpson({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
+    // ctSimpson({4,4.2,4.4,4.6,4.8,5,5.2},{7,8.2,9.4,9.8,10.6,10.2,9.2});
     //***************************************************
 
     // ppEuler(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
     //***************************************************
     // cout << endl;
+    //                                               {x}, Y0, U0
     // ppEulerHePT(myEulerfunctionY,myEulerfunctionU,{0,0.1,0.3,0.4,0.7,0.8,1},4.11,1.7);
     //***************************************************
-
+    //                                  {x}, Y0
     // RungeKutta4(myEulerfunction,{2,2.1,2.3,2.6,2.7,2.9,3,3.3,3.4,3.8,4},0.4);
     // last modified: 10:39, thu 6.
     return 0;
@@ -445,10 +474,60 @@ double RungeKutta4(double(*funct)(double, double), vector<double> x, double y0)
         x.pop_back();
         float denta = (k_11 + 2*k_12 + 2*k_13 + k_14)/6;
         cout << endl;
-        cout << " Yi = " << y0 << ", denta = " << denta <<endl;
+        cout << " Yi = " << y0 << ", denta = " << denta << ", y(i+1) = " << y0+denta << endl;
         cout << endl << endl << "-------------------------------------" <<endl;
         return RungeKutta4(funct,x,y0 + denta);
     } else{
         return y0;
     }
+}
+double maxG(double a,double b,double c){
+    double max = a;
+    max < b ? max = b : max = max;
+    max < c ? max = c : max = max;
+    return max;
+}
+double pplapdonVaSeiden(double(*functX)(double, double, double), double(*functY)(double, double, double), double(*functZ)(double, double, double), vector<double> result, double G, int n)
+{   
+    double a,b,c;
+    double g,h,q;
+    g = result[0];
+    h = result[1];
+    q = result[2];
+    cout << fixed << setprecision(6);
+    // seiden:
+    cout << "------------------------SEIDEN-----------------------------------------" << endl;
+    for ( int i = 0; i <= n; i++){
+        cout <<"i:" << i+1 << ":    " << result[0] << "      " << result[1] << "     " << result[2] << endl;
+        if ( i <= n-1){
+            a = result[0];
+            b = result[1];
+            c = result[2];
+            result[0] = functX(result[0],result[1],result[2]);
+            result[1] = functY(result[0],result[1],result[2]);
+            result[2] = functZ(result[0],result[1],result[2]);
+        }
+    }
+    cout << "Sai so sau "<< n << " lan lap: " << (G/(1-G))*maxG(abs(result[0]-a),abs(result[1]-b), abs(result[2]-c)) << endl;
+    cout << "------------------------LAP DON-----------------------------------------" << endl;
+    result[0] = g;
+    result[1] = h;
+    result[2] = q;
+    // lap don:
+    for ( int i = 0; i <= n; i++){
+        cout <<"i:" << i+1 << ":    " << result[0] << "      " << result[1] << "     " << result[2] << endl;
+        if ( i <= n-1){
+            g = a;
+            h = b;
+            q = c;
+            a = functX(result[0],result[1],result[2]);
+            b = functY(result[0],result[1],result[2]);
+            c = functZ(result[0],result[1],result[2]);
+            result[0] = a;
+            result[1] = b;
+            result[2] = c;
+        }
+    }
+    cout << "Sai so sau "<< n << " lan lap: " << (G/(1-G))*maxG(abs(g-a),abs(h-b), abs(q-c));
+    return G;
 }
