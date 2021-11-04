@@ -1,0 +1,115 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      2746,         77]*)
+(*NotebookOutlinePosition[      3392,         99]*)
+(*  CellTagsIndexPosition[      3348,         95]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+    \(f[x_, y_]\  := \ 
+      y*x\  + 3*x\  - 
+        2*y\  (*Anh\ em\ dien\ ham\ f \((x, 
+          y)\)\ cua\ minh\ vao\ day*) \), "\[IndentingNewLine]", 
+    \(y[x_, 0]\  := \ 0.4\  (*Diem\ y \((0)\)*) \), "\[IndentingNewLine]", 
+    \(y[x_, i_]\  := 
+      0.4 + \[Integral]\_2\%x f[t, 
+              y[t, i - 
+                  1]] \[DifferentialD]t\[IndentingNewLine] (*Cong\ thuc\ lap*) \
+\), "\[IndentingNewLine]", 
+    \(Expand[y[x, 4]]\  (*Moi\ lan\ lap\ anh\ em\ thay\ so\ i = 1, 2, 3, 
+      4, \(\(..\)\(\ \)\(vao\)\(\ \)\(Expand[
+          y[x, i]]\)\(\ \)\(la\)\(\ \)\(ra\)\(\ \)\(y\) \((i)\)\)*) \)}], \
+"Input"],
+
+Cell[BoxData[
+    \(\(-27.314285714285703`\) + 44.53333333333333`\ x - 
+      37.63333333333331`\ x\^2 + 19.399999999999984`\ x\^3 - 
+      5.408333333333331`\ x\^4 + 0.3833333333333334`\ x\^5 + 
+      0.26249999999999996`\ x\^6 - 0.0845238095238095`\ x\^7 + 
+      0.008854166666666666`\ x\^8\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for Microsoft Windows",
+ScreenRectangle->{{0, 1536}, {0, 776}},
+WindowSize->{870, 652},
+WindowMargins->{{148, Automatic}, {11, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 644, 14, 313, "Input"],
+Cell[2423, 69, 307, 5, 77, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+
